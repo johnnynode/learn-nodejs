@@ -6,7 +6,7 @@
 - foo.js 中通过module.exports暴露一个方法用于输出name, 
 - 最终 $ node index 输出结果如下：
   ```javascript
-    I am bar
-    fooName jack
-    global.barVarible barVarible
+   I am bar
+   fooName jack
+   global.barVarible barVarible
   ```
