@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/johnnynode/learn-nodejs/issues"
   },
-  "homepage": "https://github.com/johnnynode/learn-nodejs#readme"
+  "homepage": "https://github.com/johnnynode/learn-nodejs#readme",
+  "dependencies": {
+    "request": "^2.81.0"
+  }
 }
