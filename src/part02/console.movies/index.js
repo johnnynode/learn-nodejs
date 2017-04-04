@@ -1,4 +1,3 @@
-
 const fs = require('fs');
 const path = require('path');
 let arr = [];
@@ -7,7 +6,7 @@ let num = 0;
 // 加入数组
 (() => {
     for (var i = 0; i < 14; i++) {
-        arr.push(fs.readFileSync( path.resolve(__dirname,'frames/' +  (i + 1) + '.txt')));
+        arr.push(fs.readFileSync(path.resolve(__dirname, 'frames/' + (i + 1) + '.txt')));
     }
 })();
 
