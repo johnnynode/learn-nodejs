@@ -32,8 +32,6 @@ output:
 2
 
 异步执行顺序是：
-process.nextTick (优先级高)
-setTimeout
-setImmediate 最后执行。
+process.nextTick > setTimeout > setImmediate
 
  */
