@@ -11,5 +11,5 @@ Person.prototype.sayHello = function () {
   });
 };
 
-var p1 = new Person();
+let p1 = new Person();
 p1.sayHello();
