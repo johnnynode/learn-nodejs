@@ -12,7 +12,7 @@ function formateTrans(arr) {
     return res.join(',');
 }
 
-function rander(readPath, writePath,outerData) {
+function rander(readPath, writePath, outerData) {
     fs.readFile(readPath, 'utf8', (err, data) => {
         if (err) return console.log('read: ' + readPath + ' err!\n');
 

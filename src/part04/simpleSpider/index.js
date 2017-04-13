@@ -15,6 +15,3 @@ parse(url, (err, data) => {
     if (err) return console.log('parse 时出错： ' + err);
     rander(readPath, writePath, data);
 });
-
-
-
