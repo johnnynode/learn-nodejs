@@ -17,9 +17,9 @@ const fullPath = path.resolve(__dirname, 'index.js');
 })();
 
 // fs.open 通过第二个参数的传递来确定是读还是写。
-(()=>{
-    let fullPath1 = path.join(__dirname,'myfile.txt');
-    let fullPath2 = path.join(__dirname,'myfile2.txt');
+(() => {
+    let fullPath1 = path.join(__dirname, 'myfile.txt');
+    let fullPath2 = path.join(__dirname, 'myfile2.txt');
     // write
     fs.open(fullPath, 'wx', (err, fd) => {
         if (err) {
@@ -32,17 +32,26 @@ const fullPath = path.resolve(__dirname, 'index.js');
     // read
     fs.open(fullPath2, 'r', (err, fd) => {
         if (err) {
-            if (err.code === "ENOENT") return console.error('myfile does not exist');        
+            if (err.code === "ENOENT") return console.error('myfile does not exist');
             throw err;
         }
         console.log('do your read operation!');
     });
 })();
 
-
-// 测试文件信息
+// 测试文件信息 fs.stat
 (() => {
-    
+    let fullPath = path.join(__dirname, 'index.js');
+    // 异步方式 fs.stat
+    fs.stat(fullPath, (err, stats) => {
+        if (err) throw err;
+        console.log('stats: ');
+        console.log(stats); // 测试stats对象都有什么属性和方法
+    });
+
+    // 同步方式 fs.statSync
+
+
 })();
 
 // 测试删除文件
