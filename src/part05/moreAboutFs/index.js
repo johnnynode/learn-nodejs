@@ -99,7 +99,15 @@ const fullPath = path.resolve(__dirname, 'index.js');
     console.log('当面目录事文件夹类型吗？ ' + isDir); // 当面目录事文件夹类型吗？ true
 })();
 
-// 测试删除文件
+// 测试删除文件 fs.unlink  fs.unlinkSync
 (() => {
-
+    let writePath = path.join(__dirname,'writeTest.txt'); // 首先创建一个文件，然后再删除
+    fs.writeFileSync(writePath,'hello','utf8'); // 同步创建一个文件
+    fs.unlink(writePath,(err)=>{
+        if(err) throw err;
+        console.log('delete suc!');
+    });
 })();
+
+// fs.access
+// 
