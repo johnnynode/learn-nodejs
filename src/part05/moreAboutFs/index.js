@@ -45,14 +45,36 @@ const fullPath = path.resolve(__dirname, 'index.js');
     // 异步方式 fs.stat
     fs.stat(fullPath, (err, stats) => {
         if (err) throw err;
-        console.log('stats: ');
+        console.log('下面输出 stats 的一些属性：');
         console.log(stats); // 测试stats对象都有什么属性和方法
+        console.log('.......'); // 
+        // 下面是输出结果：stats的属性
+        // dev  
+        // mode
+        // nlink
+        // uid
+        // gid
+        // rdev
+        // blksize
+        // ino
+        // size
+        // blocks
+        // atime
+        // mtime
+        // ctime
+        // birthtime
     });
 
-    // 同步方式 fs.statSync
-
+    
 
 })();
+
+// 继续测试stats的用法
+(() => {
+    
+})();
+
+// 同步方式 fs.statSync
 
 // 测试删除文件
 (() => {
