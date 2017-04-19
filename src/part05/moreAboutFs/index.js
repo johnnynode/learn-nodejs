@@ -70,13 +70,13 @@ const fullPath = path.resolve(__dirname, 'index.js');
 (() => {
     let fullPath = path.join(__dirname, 'index.js');
     fs.stat(fullPath, (err, stats) => {
-        if(err) throw err;
-        for(var k in stats){
+        if (err) throw err;
+        for (var k in stats) {
             console.log('可用的属性和方法： ' + k);
         }
     });
 
-    // 经过测试，还有如下一些属性和方法：
+    // 经过测试，除了上面的还有如下一些属性和方法：
     // _checkModeProperty
     // isDirectory 
     // isFile
@@ -101,12 +101,22 @@ const fullPath = path.resolve(__dirname, 'index.js');
 
 // 测试删除文件 fs.unlink  fs.unlinkSync
 (() => {
-    let writePath = path.join(__dirname,'writeTest.txt'); // 首先创建一个文件，然后再删除
-    fs.writeFileSync(writePath,'hello','utf8'); // 同步创建一个文件
-    fs.unlink(writePath,(err)=>{
-        if(err) throw err;
+    let writePath = path.join(__dirname, 'writeTest.txt'); // 首先创建一个文件，然后再删除
+    fs.writeFileSync(writePath, 'hello', 'utf8'); // 同步创建一个文件
+    fs.unlink(writePath, (err) => {
+        if (err) throw err;
         console.log('delete suc!');
     });
+})();
+
+// fs.unlinkSync
+(() => {
+    // 复制上面的代码做同样的操作
+    let writePath = path.join(__dirname, 'writeTestc.txt'); // 首先创建一个文件，然后再删除
+    // fs.writeFileSync(writePath, 'hello', 'utf8'); // 同步创建一个文件
+    console.log('before....');
+    fs.writeFileSync(writePath); // return undefined
+    console.log('after...');
 })();
 
 // fs.access
