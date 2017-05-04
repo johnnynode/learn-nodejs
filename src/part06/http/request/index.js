@@ -14,7 +14,8 @@ server.on('request', function (request, response) {
     console.log(`客户端请求方法：${request.method}`);
 
     // 获取客户单请求路径,根据客户端请求的不同的url响应不同的内容
-    console.log(`客户端请求方法：${request.url}`);
+    console.log(`客户端请求url：${request.url}`);
+    response.end('Now you are requesting ：' + `${request.url}`);
 
 });
 
