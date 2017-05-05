@@ -2,9 +2,19 @@
 
 const http = require('http'); // 加载http核心模块
 const server = http.createServer(); // 通过http核心模块暴露的createServer方法得到一个服务器实例
-const FOO = 'bar';
 
-server.on('request', function (request, response) {
+server.on('request', function (req, res) {
+    let url = req.url;
+    if(url === '/'){
+        // 返回整个request对象
+        // res.end('您正在请求的是：' + '\n' + JSON.stringify(req));
+        // console.log(req);
+        var json = {name:1};
+        // var str = JSON.stringify(req);
+        // console.log(str);
+        res.end(req);
+    }
+    return;
     console.log('request.headers');
     console.log(request.headers);
     console.log('----------');
