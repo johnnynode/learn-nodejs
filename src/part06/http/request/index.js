@@ -3,30 +3,25 @@
 const http = require('http'); // 加载http核心模块
 const server = http.createServer(); // 通过http核心模块暴露的createServer方法得到一个服务器实例
 
+// 一个小案例来测试：通过用户请求不同的url，来返回不同的信息
 server.on('request', function (req, res) {
     let url = req.url;
     if(url === '/'){
-        // 返回整个request对象
-        // res.end('您正在请求的是：' + '\n' + JSON.stringify(req));
-        // console.log(req);
-        var json = {name:1};
-        // var str = JSON.stringify(req);
-        // console.log(str);
-        res.end(req);
+        res.setHeader('Content-Type', 'text/html; charset=utf-8');
+        // res.setHeader('X-Foo', 'bar'); // just for test 目的是测试可以在header对象中挂载东西
+        // res.writeHead(200, {'Content-Type': 'text/plain; charset=utf-8'}); // more powerful
+        res.end('欢迎!');
+    }else if(url === '/headers'){
+        res.end(JSON.stringify(req.headers)); 
+    }else if(url === '/version'){
+        res.end(req.httpVersion); // 1.1
+    }else if(url === '/method'){
+        res.end(req.method); // GET
+    }else if(url === '/url'){
+        res.end(req.url); // /url
+    }else{
+        res.end('error'); // error
     }
-    return;
-    console.log('request.headers');
-    console.log(request.headers);
-    console.log('----------');
-    console.log(`客户端使用的http版本: ${request.httpVersion}`);
-
-    // 在url地址栏中，只要输入地址敲回车，就是GET请求
-    console.log(`客户端请求方法：${request.method}`);
-
-    // 获取客户单请求路径,根据客户端请求的不同的url响应不同的内容
-    console.log(`客户端请求url：${request.url}`);
-    response.end('Now you are requesting ：' + `${request.url}`);
-
 });
 
 // 4. 开启服务器，设置可监听的IP和端口号
