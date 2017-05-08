@@ -26,5 +26,5 @@ server.on('request', function (req, res) {
 
 // 4. 开启服务器，设置可监听的IP和端口号
 server.listen(3000, '127.0.0.1', function () {
-    console.log('server is running ar port 3000');
+    console.log('server is running at port 3000');
 });
