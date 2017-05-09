@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/johnnynode/learn-nodejs#readme",
   "dependencies": {
+    "art-template": "^4.8.2",
     "cheerio": "^0.22.0",
     "express": "^4.15.2",
     "iconv-lite": "^0.4.17",
