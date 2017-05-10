@@ -39,6 +39,7 @@ server.on('request', function (req, res) {
         console.log(reqPath);
 
         fs.readFile(reqPath, 'utf8', (err, data) => {
+            // 请求找不到 去404
             if (err) {
                 res.writeHead(302, {
                     'Location': '/404.html'
