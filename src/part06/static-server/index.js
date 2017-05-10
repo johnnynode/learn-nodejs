@@ -30,16 +30,21 @@ server.on('request', function (req, res) {
                 container: container
             });
             // 设置头
-            res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
+            res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
             res.end(html);
         })
-    }else{
-        let reqPath = path.join(__dirname,url);
+    } else {
+        let reqPath = path.join(__dirname, url);
         console.log('reqPath');
         console.log(reqPath);
 
-        fs.readFile(reqPath,'utf8',(err,data)=>{
-            if(err) throw err;
+        fs.readFile(reqPath, 'utf8', (err, data) => {
+            if (err) {
+                res.writeHead(302, {
+                    'Location': '/404.html'
+                });
+                res.end();
+            }
             res.end(data);
         });
     }
