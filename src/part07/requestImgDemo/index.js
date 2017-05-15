@@ -31,7 +31,7 @@ server.on('request', function (request, response) {
                 return response.end(err.message);
             }
             response.writeHead(200, {
-                'Content-Type': 'image/jpeg'
+                'Content-Type': 'image/jpeg' // 静态资源服务器应该按mime类型来设置content-type 之前有
             });
             response.end(data);
         });
