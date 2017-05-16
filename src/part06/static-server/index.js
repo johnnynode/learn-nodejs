@@ -2,52 +2,22 @@
 
 const http = require('http');
 const server = http.createServer();
-const fs = require('fs');
 const path = require('path');
-
-const template = require('art-template');
+const rootDir = path.resolve(__dirname, 'public');
+const handler = require('./handler');
 
 server.on('request', function (req, res) {
     let url = req.url;
-    console.log('url');
-    console.log(url);
+    let method = req.method;
+    if (method !== 'GET') {
+        return;
+    }
     if (url === '/') {
-        fs.readdir(path.join(__dirname, 'public'), (err, files) => {
-            if (err) throw err;
-            let container = []; // all dirs 
-            files.forEach((item) => {
-                let filePath = path.join(__dirname, 'public', item);
-                let isDir = fs.statSync(filePath).isDirectory();
-                container.push({
-                    src: filePath,
-                    name: item,
-                    type: isDir ? 'dir' : 'file'
-                });
-            })
-            // 读取index.html文件,并经过渲染之后返回
-            let indexFile = path.join(__dirname, 'index.html');
-            let html = template(indexFile, {
-                container: container
-            });
-            // 设置头
-            res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-            res.end(html);
-        })
+        handler.handleDir(rootDir, res); // 读取根目录
+    } else if (url.includes('.')) {
+        handler.handleFile(path.join(__dirname, url), res); // 读取文件
     } else {
-        let reqPath = path.join(__dirname, url);
-        console.log('reqPath');
-        console.log(reqPath);
-
-        fs.readFile(reqPath, 'utf8', (err, data) => {
-            // 请求找不到 去404
-            if (err) {
-                res.writeHead(301, {
-                    'Location': '/404.html'
-                });
-                res.end();
-            }
-            res.end(data);
-        });
+        handler.handleDir(path.join(rootDir, url), res); // 读取下级目录
     }
 });
 
