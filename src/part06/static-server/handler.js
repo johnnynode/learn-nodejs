@@ -16,33 +16,35 @@ function handleDir(rootDir, res) {
             res.end();
         }
 
-        let contents = [];
+        let container = [];
         files.map((item) => {
             let fullPath = path.join(rootDir, item); // 单个文件的路径
             // 获取目录并添加到数组中
             if (stat(fullPath).isDirectory()) {
-                contents.push(item);
+                container.push(item);
             }
+        });
+
+        // 把数据绑定模板显示
+        let templatePath = path.join(__dirname, 'index.html');
+        fs.readFile(templatePath, 'utf8', (err, data) => {
+            if (err) {
+                return res.end(err.message);
+            }
+            let html = template(templatePath, {
+                container: container
+            });
+            // 设置头
+            res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+            res.end(html); // 响应数据
         })
     });
 
-    // 把数据绑定模板显示
-    let templatePath = path.join(__dirname, 'index.html');
-    fs.readFile(templatePath, 'utf8', (err, data) => {
-        if (err) {
-            return res.end(err.message);
-        }
-        let html = template(templatePath, {
-            container: container
-        });
-        // 设置头
-        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-        res.end(html); // 响应数据
-    })
+
 }
 
 // 操作文件的方法
-function handleFile(rootFile,res){
+function handleFile(rootFile, res) {
     // 读取文件内容，响应给客户端
     fs.readFile(rootFile, (err, data) => {
         if (err) {
