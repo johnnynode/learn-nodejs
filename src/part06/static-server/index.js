@@ -3,7 +3,6 @@
 const http = require('http');
 const server = http.createServer();
 const path = require('path');
-const rootDir = path.resolve(__dirname, 'public');
 const handler = require('./handler');
 
 server.on('request', function (req, res) {
@@ -12,12 +11,10 @@ server.on('request', function (req, res) {
     if (method !== 'GET') {
         return;
     }
-    if (url === '/') {
-        handler.handleDir(rootDir, res); // 读取根目录
-    } else if (url.includes('.')) {
-        handler.handleFile(path.join(__dirname, url), res); // 读取文件
+    if (url.includes('.')) {
+        handler.handleFile(url, res); // 读取文件
     } else {
-        handler.handleDir(path.join(rootDir, url), res); // 读取下级目录
+        handler.handleDir(url, res); // 读取下级目录
     }
 });
 

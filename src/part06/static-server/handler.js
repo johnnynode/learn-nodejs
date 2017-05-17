@@ -3,11 +3,15 @@
 const fs = require('fs');
 const stat = fs.statSync; // 用于获取文件信息
 const path = require('path');
+const rootDir = path.resolve(__dirname, 'public');
 const template = require('art-template');
 
 // 操作文件夹的方法
-function handleDir(rootDir, res) {
-    fs.readdir(rootDir, (err, files) => {
+function handleDir(url, res) {
+    console.log('url');
+    console.log(url);
+    let dirPath = path.join(rootDir,url);
+    fs.readdir(dirPath, (err, files) => {
         if (err) {
             console.log(err.message);
             res.writeHead(301, {
@@ -19,18 +23,22 @@ function handleDir(rootDir, res) {
         let container = [];
         files.map((item) => {
             let fullPath = path.join(rootDir, item); // 单个文件的路径
+            container.push(item);
             // 获取目录并添加到数组中
+            /*
             if (stat(fullPath).isDirectory()) {
                 container.push(item);
             }
+            */
         });
 
         // 把数据绑定模板显示
         let templatePath = path.join(__dirname, 'index.html');
-        fs.readFile(templatePath, 'utf8', (err, data) => {
+        fs.open(templatePath, 'r', (err, fd) => {
             if (err) {
                 return res.end(err.message);
             }
+            
             let html = template(templatePath, {
                 container: container
             });
@@ -39,7 +47,6 @@ function handleDir(rootDir, res) {
             res.end(html); // 响应数据
         })
     });
-
 
 }
 

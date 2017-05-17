@@ -6,11 +6,12 @@
     <link rel="stylesheet" type="" href="./assets/css/style.css">
 </head>
 <body>
-    Hello I am Index!
+    <h3>在线资源管理器</h3>
+    
     <ul>
         {{each container}}
         <li>
-            <a href="">{{$value.name}}</a>
+            <a href="/{{$value}}">{{$value}}</a>
         </li>
         {{/each}}
     </ul>
