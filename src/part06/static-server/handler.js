@@ -8,29 +8,29 @@ const template = require('art-template');
 
 // 操作文件夹的方法
 function handleDir(url, res) {
-    console.log('url');
-    console.log(url);
-    let dirPath = path.join(rootDir,url);
+    url = url.substring(1);
+    let dirPath = path.join(rootDir, url);
     fs.readdir(dirPath, (err, files) => {
         if (err) {
             console.log(err.message);
             res.writeHead(301, {
                 'Location': '/404.html'
             });
-            res.end();
+            return res.end();
         }
 
         let container = [];
-        files.map((item) => {
-            let fullPath = path.join(rootDir, item); // 单个文件的路径
-            container.push(item);
-            // 获取目录并添加到数组中
-            /*
-            if (stat(fullPath).isDirectory()) {
-                container.push(item);
+        for (var i = 0; i < files.length; i++) {
+            var item = files[i];
+            if (item === '404.html' || item === 'favicon.ico') {
+                continue;
             }
-            */
-        });
+            let fullPath = path.join(rootDir, url, item); // 单个文件的路径
+            container.push({
+                name: item,
+                path: path.join(url, item)
+            });
+        }
 
         // 把数据绑定模板显示
         let templatePath = path.join(__dirname, 'index.html');
@@ -38,7 +38,7 @@ function handleDir(url, res) {
             if (err) {
                 return res.end(err.message);
             }
-            
+
             let html = template(templatePath, {
                 container: container
             });
@@ -51,9 +51,13 @@ function handleDir(url, res) {
 }
 
 // 操作文件的方法
-function handleFile(rootFile, res) {
+function handleFile(url, res) {
+    url = url.substring(1);
+    let filePath = path.join(rootDir, url);
     // 读取文件内容，响应给客户端
-    fs.readFile(rootFile, (err, data) => {
+    console.log('filePath');
+    console.log(filePath);
+    fs.readFile(filePath, (err, data) => {
         if (err) {
             console.log(err.message);
             res.writeHead(301, {
@@ -63,7 +67,7 @@ function handleFile(rootFile, res) {
         }
 
         // 读取文件，解析json，然后根据对应的扩展名，找到对应的mime Content-Type
-        getContentTypeByExtName(path.extname(rootFile), (err, mime) => {
+        getContentTypeByExtName(path.extname(filePath), (err, mime) => {
             if (err) {
                 return res.end(err.message);
             }
@@ -78,9 +82,24 @@ function handleFile(rootFile, res) {
     });
 }
 
+// 404
+function handle404(res) {
+    let path404 = path.join(rootDir, '404.html');
+
+    fs.readFile(path404, 'utf8', (err, data) => {
+        if (err) {
+            return console.log(err.message);
+        }
+        res.writeHead(200, {
+            'Content-Type': 'text/html; charset=utf-8'
+        });
+        res.end(data);
+    })
+}
+
 // 通过请求的后缀名来返回不同的 contentType
 function getContentTypeByExtName(extName, callback) {
-    fs.readFile(path.join(__dirname, 'mime.txt'), 'utf8', function (err, data) {
+    fs.readFile(path.join(__dirname, 'mime.txt'), 'utf8', (err, data) => {
         if (err) {
             return callback(err, null);
         }
@@ -96,3 +115,4 @@ function getContentTypeByExtName(extName, callback) {
 // 暴露接口
 module.exports.handleDir = handleDir;
 module.exports.handleFile = handleFile;
+module.exports.handle404 = handle404;

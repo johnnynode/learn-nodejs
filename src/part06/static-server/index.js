@@ -11,6 +11,9 @@ server.on('request', function (req, res) {
     if (method !== 'GET') {
         return;
     }
+    if (url === '/404.html') {
+        handler.handle404(res);
+    }
     if (url.includes('.')) {
         handler.handleFile(url, res); // 读取文件
     } else {

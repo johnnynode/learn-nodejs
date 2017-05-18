@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
-    <link rel="stylesheet" type="" href="./assets/css/style.css">
 </head>
 <body>
     <h3>在线资源管理器</h3>
@@ -11,7 +10,7 @@
     <ul>
         {{each container}}
         <li>
-            <a href="/{{$value}}">{{$value}}</a>
+            <a href="/{{$value.path}}">{{$value.name}}</a>
         </li>
         {{/each}}
     </ul>
