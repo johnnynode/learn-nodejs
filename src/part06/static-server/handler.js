@@ -39,9 +39,7 @@ function handleDir(url, res) {
                 return res.end(err.message);
             }
 
-            let html = template(templatePath, {
-                container: container
-            });
+            let html = template(templatePath, {container});
             // 设置头
             res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
             res.end(html); // 响应数据
@@ -55,8 +53,6 @@ function handleFile(url, res) {
     url = url.substring(1);
     let filePath = path.join(rootDir, url);
     // 读取文件内容，响应给客户端
-    console.log('filePath');
-    console.log(filePath);
     fs.readFile(filePath, (err, data) => {
         if (err) {
             console.log(err.message);
