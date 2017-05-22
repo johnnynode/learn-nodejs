@@ -6,40 +6,7 @@ const path = require('path');
 const url = require('url');
 const qstring = require('querystring');
 const _ = require('underscore');
-
-/* 模拟的假数据 */
-const musicList = [
-    {
-        id: '1',
-        name: '雪天',
-        singer: '雪儿',
-        isHightRate: true
-    },
-    {
-        id: '2',
-        name: '蓝雪在飘',
-        singer: '敏敏',
-        isHightRate: false
-    },
-    {
-        id: '3',
-        name: '平凡之路',
-        singer: '朴树',
-        isHightRate: true
-    },
-    {
-        id: '4',
-        name: 'You and Me',
-        singer: 'Rosie Tomas',
-        isHightRate: true
-    },
-    {
-        id: '5',
-        name: '绅士',
-        singer: '薛之谦',
-        isHightRate: false
-    }
-];
+const musicList = require('./musicData'); // 获取数据
 
 // 用来匹配删除链接的url
 const regex_remove = /^\/remove\/(\d{1,6})$/;
@@ -50,7 +17,7 @@ const server = http.createServer((req, res) => {
     let method = req.method;
 
     if (pathname === '/') {
-        fs.readFile('./index.html', 'utf8', function (err, data) {
+        fs.readFile(path.join(__dirname, 'index.html'), 'utf8', function (err, data) {
             if (err) {
                 return res.end(err.message);
             }
@@ -65,7 +32,7 @@ const server = http.createServer((req, res) => {
             res.end(htmlStr);
         });
     } else if (method === 'GET' && pathname === '/add') {
-        fs.readFile('./add.html', 'utf8', function (err, data) {
+        fs.readFile(path.join(__dirname, 'add.html'), 'utf8', function (err, data) {
             if (err) {
                 return res.end(err.message);
             }
@@ -84,14 +51,27 @@ const server = http.createServer((req, res) => {
             if (musicInfo) {
                 return res.end('music is already exists');
             }
-            isHightRate = isHightRate === '1' ? true : false;
+            isHightRate = isHightRate === '1';
             musicList.push({
                 id,
                 name,
                 singer,
                 isHightRate
             });
+            console.log('here1');
             res.end('success');
+            // 2s 后跳转到 暂时无法做到！ /
+            /*
+            setTimeout(function(){
+                console.log('here2');
+                res.writeHead(302, {
+                    'Location': '/'
+                });
+                console.log('here3');
+                res.end('111');
+            },2000);
+            */
+
         });
     } else if (method === 'GET' && regex_remove.test(pathname)) {
         let m_id = pathname.match(regex_remove)[1];
@@ -100,7 +80,7 @@ const server = http.createServer((req, res) => {
         musicList.splice(index, 1);
         res.end('remove success');
     } else if (method === 'GET' && pathname === '/error') {
-        fs.readFile('./404.html', 'utf8', (err, data) => {
+        fs.readFile( path.join(__dirname, '404.html'), 'utf8', (err, data) => {
             if (err) {
                 return res.end(err.message);
             }
@@ -127,6 +107,7 @@ server.listen(3000, '127.0.0.1', () => {
     console.log('server is listening at port 3000');
 });
 
+/* 处理post的数据 */
 function recivePostData(request, callback) {
     let data = '';
     request.on('data', function (chunk) {
