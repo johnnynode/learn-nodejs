@@ -58,20 +58,11 @@ const server = http.createServer((req, res) => {
                 singer,
                 isHightRate
             });
-            console.log('here1');
-            res.end('success');
-            // 2s 后跳转到 暂时无法做到！ /
-            /*
-            setTimeout(function(){
-                console.log('here2');
-                res.writeHead(302, {
-                    'Location': '/'
-                });
-                console.log('here3');
-                res.end('111');
-            },2000);
-            */
-
+            res.writeHead(301, {
+                'Location': '/'
+            });
+            res.end();
+            // 暂时无法支持 end() 之后再重定向，让客户端做。
         });
     } else if (method === 'GET' && regex_remove.test(pathname)) {
         let m_id = pathname.match(regex_remove)[1];
