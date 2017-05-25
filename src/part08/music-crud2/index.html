@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>我的歌单</title>
+</head>
+<body>
+<h1>首页</h1>
+<a href="/add">点击添加歌曲</a>
+<table>
+  <thead>
+  <th>编号</th>
+  <th>名称</th>
+  <th>歌手</th>
+  <th>302K?</th>
+  <th>操作</th>
+  </thead>
+  <tbody>
+
+  <% musicList.forEach(function(item){ %>
+    <tr>
+      <td><%= item.id %></td>
+      <td><%= item.name %></td>
+      <td><%= item.singer %></td>
+      <td>
+        <% if(item.isHightRate){%>
+          <input disabled="disabled" type="radio" checked>是
+          <input disabled="disabled" type="radio">否
+        <%}else{%>
+          <input disabled="disabled" type="radio">是
+          <input disabled="disabled" type="radio" checked>否
+        <%} %>
+      </td>
+      <td>
+        <a href="/edit/<%= item.id %>">编辑</a>
+        <a href="/remove/<%= item.id %>">删除</a>
+      </td>
+    </tr>
+  <%}); %>
+  </tbody>
+</table>
+</body>
+</html>
