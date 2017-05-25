@@ -1,16 +1,13 @@
 "use strict";
 
 const http = require('http');
-const fs = require('fs');
-const path = require('path');
 const url = require('url');
-const qstring = require('querystring');
-const _ = require('underscore');
-const musicList = require('./musicData'); // 获取数据
+const router = require('./services/router');
 
-// 用来匹配删除链接的url
-const regex_remove = /^\/remove\/(\d{1,6})$/;
-const regex_edit = /^\/edit\/(\d{1,6})$/;
+const render = require('./services/render');
+const staticServe = require('./services/static-serve');
+const bodyParser = require('./services/body-parser');
+
 
 const server = http.createServer((req, res) => {
     let urlObj = url.parse(req.url);
