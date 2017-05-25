@@ -24,11 +24,11 @@
       <td><%= item.singer %></td>
       <td>
         <% if(item.isHightRate){%>
-          <input type="radio" checked>是
-          <input type="radio">否
+          <input disabled="disabled" type="radio" checked>是
+          <input disabled="disabled" type="radio">否
         <%}else{%>
-          <input type="radio">是
-          <input type="radio" checked>否
+          <input disabled="disabled" type="radio">是
+          <input disabled="disabled" type="radio" checked>否
         <%} %>
       </td>
       <td>
