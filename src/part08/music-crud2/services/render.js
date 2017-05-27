@@ -1,3 +1,4 @@
+/* 该模块用于渲染view层模板 */
 "use strict";
 
 const fs = require('fs');
