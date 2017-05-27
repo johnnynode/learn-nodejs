@@ -4,7 +4,7 @@ exports.getMusicList = function (req, res) {
         'Content-Type': 'text/plain; charset=utf-8'
     });
     res.end(JSON.stringify({
-        musicList: musicList
+        musicList
     }));
 };
 
@@ -25,7 +25,7 @@ exports.doAdd = function (req, res) {
         return res.end('music is already exists');
     }
 
-    isHightRate = isHightRate === '1' ? true : false;
+    isHightRate = isHightRate === '1';
 
     musicList.push({
         id,
@@ -34,8 +34,8 @@ exports.doAdd = function (req, res) {
         isHightRate
     });
 
-    res.writeHead(302, {
-        'Location': 'http://192.168.3.12:3000/'
+    res.writeHead(301, {
+        'Location': '/'
     });
 
     res.end();
@@ -65,7 +65,7 @@ exports.showEdit = function (req, res) {
 
     // 如果用户要编辑的
     if (!musicInfo) {
-        return res.end('music is not exists');
+        return res.end('music is not exists!');
     }
     res.render('edit', {
         musicInfo
@@ -86,15 +86,15 @@ exports.doEdit = function (req, res) {
         res.writeHead(200, {
             'Content-Type': 'text/html; charset=utf-8'
         });
-        return res.end('can"t find');
+        return res.end('找不到您要修改的项!');
     }
 
     musicList[index].name = name;
     musicList[index].singer = singer;
-    musicList[index].isHightRate = isHightRate === '1' ? true : false;
+    musicList[index].isHightRate = isHightRate === '1';
 
-    res.writeHead(302, {
-        'Location': 'http://192.168.3.12:3000/'
+    res.writeHead(301, {
+        'Location': '/'
     });
 
     res.end();
