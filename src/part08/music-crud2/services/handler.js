@@ -1,4 +1,8 @@
 /* 获取音乐列表 */
+"use strict";
+
+const musicList = require('./musicData');
+
 exports.getMusicList = function (req, res) {
     res.writeHead(200, {
         'Content-Type': 'text/plain; charset=utf-8'
@@ -10,6 +14,10 @@ exports.getMusicList = function (req, res) {
 
 exports.showAdd = function (req, res) {
     res.render('add');
+};
+
+exports.showIndex = function (req, res) {
+    res.render('index');
 };
 
 /* 添加功能 */
@@ -99,3 +107,13 @@ exports.doEdit = function (req, res) {
 
     res.end();
 };
+
+// handler.favicon
+exports.favicon = function (req, res) {
+    res.favicon();
+}
+
+// 处理404
+exports.error = function (req, res) {
+    res.error();
+}

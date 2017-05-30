@@ -5,7 +5,7 @@ const url = require('url');
 const router = require('./services/router');
 
 const render = require('./services/render');
-const staticServe = require('./services/static-serve');
+const staticServe = require('./services/static-server');
 const bodyParser = require('./services/body-parser');
 
 const server = http.createServer((req, res) => {

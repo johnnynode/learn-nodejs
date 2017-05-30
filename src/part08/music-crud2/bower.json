@@ -1,0 +1,15 @@
+{
+  "name": "music-crud2",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+  ],
+  "license": "ISC",
+  "moduleType": [],
+  "homepage": "",
+
+  "dependencies": {
+    "jquery": "^2.2.1",
+    "artTemplate": "^3.0.1"
+  }
+}

@@ -1,43 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>我的歌单</title>
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 </head>
-<body>
-<h1>首页</h1>
-<a href="/add">点击添加歌曲</a>
-<table>
-  <thead>
-  <th>编号</th>
-  <th>名称</th>
-  <th>歌手</th>
-  <th>302K?</th>
-  <th>操作</th>
-  </thead>
-  <tbody>
 
-  <% musicList.forEach(function(item){ %>
+<body>
+  <a href="/add">点击添加歌曲</a>
+  <table>
+    <thead>
+      <th>编号</th>
+      <th>名称</th>
+      <th>歌手</th>
+      <th>302K?</th>
+      <th>操作</th>
+    </thead>
+    <tbody id="tbody">
+
+    </tbody>
+  </table>
+  <script type="text/template" id="template">
+
+    {{each musicList as value i}}
     <tr>
-      <td><%= item.id %></td>
-      <td><%= item.name %></td>
-      <td><%= item.singer %></td>
+      <td>{{value.id}}</td>
+      <td>{{value.name}}</td>
+      <td>{{value.singer}}</td>
       <td>
-        <% if(item.isHightRate){%>
-          <input disabled="disabled" type="radio" checked>是
-          <input disabled="disabled" type="radio">否
-        <%}else{%>
-          <input disabled="disabled" type="radio">是
-          <input disabled="disabled" type="radio" checked>否
-        <%} %>
+        {{if value.isHightRate}}
+        <input type="radio" checked/>是
+        <input type="radio" />否 
+        {{else if()}}
+        <input type="radio" />是
+        <input type="radio" checked/>否 
+        {{/if}}
       </td>
+
       <td>
-        <a href="/edit/<%= item.id %>">编辑</a>
-        <a href="/remove/<%= item.id %>">删除</a>
+        <a href="/edit/{{value.id}}">编辑</a>
+        <a href="JavaScript:remove('/remove/{{value.id}}')">删除</a>
       </td>
     </tr>
-  <%}); %>
-  </tbody>
-</table>
+    {{/each}}
+    
+  </script>
+  <script src="/assets/vender/jquery/dist/jquery.js"></script>
+  <script src="/assets/vender/artTemplate/dist/template.js"></script>
+  <script>
+
+  </script>
+  <script>
+    // 入口函数
+    $(function () {
+      loadMusic();
+    });
+
+    function loadMusic() {
+      $.ajax({
+        url: '/getJson',
+        type: 'get',
+        success: function (data) {
+          var jsonObj = JSON.parse(data);
+          var htmlStr = template('template', {
+            musicList: jsonObj.musicList
+          });
+          $('#tbody').html(htmlStr);
+        }
+      });
+    }
+
+    function remove(url) {
+      if (!confirm('您确定要删除吗？')) {
+        return;
+      }
+
+      $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (data) {
+          {
+            var jsonObj = JSON.parse(data);
+            if (jsonObj.code === '1') {
+              loadMusic();
+            } else if (jsonObj.code === '0') {
+              alert('删除失败');
+            }
+          }
+        }
+      });
+    }
+  </script>
 </body>
+
 </html>

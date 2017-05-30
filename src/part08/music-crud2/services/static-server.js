@@ -8,9 +8,10 @@ const mime = require('mime');
 module.exports = function (req, res, next) {
     let pathname = url.parse(req.url).pathname;
     if (pathname.startsWith('/assets/')) {
-        let fullPath = '.' + req.url;
+        let fullPath = path.join(__dirname, '../' + req.url);
         fs.readFile(fullPath, function (err, data) {
             if (err) {
+                console.log('can not find!');
                 res.writeHead(404, {
                     'Content-Type': 'text/plain; charset=utf-8'
                 });
