@@ -4,6 +4,11 @@
   "main": "index.js",
   "authors": [
   ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "vender"
+  ],
   "license": "ISC",
   "moduleType": [],
   "homepage": "",
