@@ -14,5 +14,5 @@ readStream
   .pipe(gzip)
   .pipe(writeStream)
   .on('finish', function () {
-    console.log('encrypt and gzip done');
+    console.log('encrypt and zip done');
   })
