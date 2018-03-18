@@ -1,5 +1,8 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var fs = require('fs');
+var multer = require('multer');
+var upload = multer({dest:'uploads/'});
 
 var app = express();
 
@@ -21,6 +24,17 @@ app.post('/', urlencoded, (req, res) => {
 app.post('/upload', jsonParser, (req, res) => {
   console.dir(req.body);
   res.send(req.body);
+});
+
+app.get('/form', (req, res) => {
+  var form = fs.readFileSync('./views/form.html', {encoding:"utf8"});
+  res.send(form);
+});
+
+// like: form-data
+app.post('/upload2', upload.single('logo'), (req, res) => {
+  console.dir(req.body);
+  res.send({'ret_code':0});
 });
 
 app.get('/profile/:id', (req, res) => {
