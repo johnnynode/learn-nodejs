@@ -2,15 +2,23 @@ var express = require('express');
 var bodyParser = require('body-parser');
 
 var app = express();
-// app.use(bodyParser.urlencoded({extended:false})); // 只能处理url上的，不能处理json
-app.use(bodyParser.json()); // 处理json形式的post
+
+var urlencoded = bodyParser.urlencoded({extended:false}); // 只能处理url上的，不能处理json
+var jsonParser = bodyParser.json(); // 处理json形式的post
 
 app.get('/', (req, res) => {
   console.dir(req.query);
   res.send("home page");
 });
 
-app.post('/', (req, res) => {
+// form submit like : x-www-form-urlencoded
+app.post('/', urlencoded, (req, res) => {
+  console.dir(req.body);
+  res.send(req.body);
+});
+
+// like: json post
+app.post('/upload', jsonParser, (req, res) => {
   console.dir(req.body);
   res.send(req.body);
 });
