@@ -27,6 +27,8 @@ var upload = multer({storage: storage});
 
 var app = express();
 
+app.set('view engine', 'ejs'); //  模板引擎 1 设置
+
 var urlencoded = bodyParser.urlencoded({extended:false}); // 只能处理url上的，不能处理json
 var jsonParser = bodyParser.json(); // 处理json形式的post
 
@@ -51,7 +53,12 @@ app.get('/form', (req, res) => {
   // var form = fs.readFileSync('./views/form.html', {encoding:"utf8"});
   // res.send(form);
   res.sendFile(__dirname + './views/form.html');
-  
+});
+
+// form ejs template
+app.get('/ejsform/:name', (req, res) => {
+  var name = req.params.name;
+  res.render('form2', {name}); //  模板引擎 2 渲染
 });
 
 // like: form-data
