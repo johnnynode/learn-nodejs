@@ -20,15 +20,21 @@ function api_fetch(res) {
     res.end(JSON.stringify(json));
 }
 
-// like /test/query?name=1
-function test_query(res, query) {
+// handle like /test/query?name=1&ss=2332
+function test_query(res, params) {
     res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify(query));
+    res.end(JSON.stringify(params));
+}
+
+function test_post(res, params) {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(params));
 }
 
 module.exports = {
     home,
     review,
     api_fetch,
-    test_query
+    test_query,
+    test_post
 }
