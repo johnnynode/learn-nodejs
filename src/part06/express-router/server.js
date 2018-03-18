@@ -15,7 +15,13 @@ app.get('/multiprofile/:id/user/:u', (req, res) => {
 // like abcd , acd // ? 0 or 1 b
 app.get('/ab?cd', (req, res) => {
   res.send('/ab?cd');
-})
+});
+
+// query like: /test/query?find=hot&sort=1
+app.get('/test/query', (req, res) => {
+  var json = req.query;
+  res.send(json);
+});
 
 app.listen(3000, ()=>{
   console.log('server is on 3000 port');
