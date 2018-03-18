@@ -1,8 +1,29 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var fs = require('fs');
+
+var createFolder = (folder) => {
+  try {
+    fs.accessSync(folder);
+  } catch(e) {
+    fs.mkdirSync(folder);
+  }
+};
+
+var uploadFolder = './upload/';
+
+createFolder(uploadFolder);
+
 var multer = require('multer');
-var upload = multer({dest:'uploads/'});
+var storage = multer.diskStorage({
+  destination:(req, file, cb)=>{
+    cb(null, uploadFolder);
+  },
+  filename:(req, file, cb)=>{
+    cb(null, file.originalname);
+  }
+});
+var upload = multer({storage: storage});
 
 var app = express();
 
