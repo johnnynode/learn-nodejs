@@ -48,8 +48,10 @@ app.post('/upload', jsonParser, (req, res) => {
 });
 
 app.get('/form', (req, res) => {
-  var form = fs.readFileSync('./views/form.html', {encoding:"utf8"});
-  res.send(form);
+  // var form = fs.readFileSync('./views/form.html', {encoding:"utf8"});
+  // res.send(form);
+  res.sendFile(__dirname + './views/form.html');
+  
 });
 
 // like: form-data
