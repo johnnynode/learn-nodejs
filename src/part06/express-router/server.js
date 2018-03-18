@@ -1,6 +1,19 @@
 var express = require('express');
+var bodyParser = require('body-parser');
 
 var app = express();
+// app.use(bodyParser.urlencoded({extended:false})); // 只能处理url上的，不能处理json
+app.use(bodyParser.json()); // 处理json形式的post
+
+app.get('/', (req, res) => {
+  console.dir(req.query);
+  res.send("home page");
+});
+
+app.post('/', (req, res) => {
+  console.dir(req.body);
+  res.send(req.body);
+});
 
 app.get('/profile/:id', (req, res) => {
   console.dir(req.params);
@@ -25,4 +38,4 @@ app.get('/test/query', (req, res) => {
 
 app.listen(3000, ()=>{
   console.log('server is on 3000 port');
-})
+});
