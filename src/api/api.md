@@ -68,4 +68,37 @@ http.createServer((req, res)=>{
 });
 http.listen(8080);
 
+// 注意： querystring 只能解析 xx=1&yy=2 这种不带？的
+// 而下面的 url模块可以直接处理，比querystring模块更强大
+
+```
+
+#### 比querystring更方便的形式 url 模块 获取get参数
+
+关键代码：
+
+```javascript
+const urlLib = require('url');
+// true 参数会把query部分从字符串转换为对象
+let result = urlLib.parse('http://www.baidu.com?wd=1&x=1', true) 
+console.log(result.query); // wd=1&x=1 => {wd:1,x:1}
+console.log(result.pathname); // url 地址
+```
+
+完整代码：
+
+```javascript
+const http = require('http');
+const urlLib = require('url');
+
+http.createServer((req, res)=>{
+  let obj = urlLib.parse(req.url, true);
+  let url = obj.pathname;
+  let getParams = obj.query;
+  console.log(url, getParams);
+  res.write('111');
+  res.end();
+});
+http.listen(8080);
+
 ```
