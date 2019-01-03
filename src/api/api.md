@@ -102,3 +102,31 @@ http.createServer((req, res)=>{
 http.listen(8080);
 
 ```
+
+####  处理post数据 
+
+```javascript
+const http = require('http');
+const querystring = require('querystring');
+
+// 简单处理一个字符串类型的post数据请求
+http.createServer((req, res)=>{
+  let str = ''; // 用于接收数据
+
+  // post 数据很大，比如 1G , 需要以流的形式处理
+  // data 事件会多次触发
+  req.on('data', (data)=>{
+    str += data;
+  });
+  // end 事件 当数据全部到达时使用
+  req.on('end', ()=>{
+    console.log(str); // 最终的全部字符串 xx=1&yy=2&&wd=3
+    let result = querystring.parse(str);
+    console.log(result); // 对象 {xx:1, yy:2, wd:3}
+  });
+
+  res.write('111');
+  res.end();
+});
+http.listen(8080);
+```
