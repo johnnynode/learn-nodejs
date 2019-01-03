@@ -17,3 +17,55 @@
 - 错误优先处理 err 优先判断
 - data 文件数据，转成文字 `data.toString()` 方便人调试
 
+#### querystring 获取get参数
+
+原始做法:
+
+```javascript
+const http = require('http');
+http.createServer((req, res)=>{
+  let getParams = {};
+  let url = '';
+  if(req.url.indexOf('?') != -1) {
+    let arr1 = req.url.split('?');
+    url = arr[0]; // 地址
+    let arr2 = arr[1].split('&'); // 数组型参数 ['user=blue', 'pass=123']
+    for(var i=0; i < arr.length; i++) {
+      let item = arr2[i].split('=');
+      getParams[item[0]] = item[1]; // 保存成 key value 键值对
+    }
+  } else {
+    url = req.url;
+  }
+  console.log(url);
+  console.log(getParams);
+  res.write('111');
+  res.end();
+});
+http.listen(8080);
+```
+
+querystring 改造后的结果：
+
+```javascript
+const http = require('http');
+const querystring = require('querystring');
+
+http.createServer((req, res)=>{
+  let getParams = {};
+  let url = '';
+  if(req.url.indexOf('?') != -1) {
+    let arr1 = req.url.split('?');
+    url = arr[0]; // 地址
+    getParams = querystring.parse(arr[1]);
+  } else {
+    url = req.url;
+  }
+  console.log(url);
+  console.log(getParams);
+  res.write('111');
+  res.end();
+});
+http.listen(8080);
+
+```
