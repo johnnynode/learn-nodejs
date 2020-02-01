@@ -7,3 +7,5 @@ express的安装
     * 项目中使用 `../../../node_modules/.bin/express` 来执行express命令
     * `../../../node_modules/.bin/express -e demo`
     * `../../../node_modules/.bin/express -e .`
+    * 在`express-gen`目录下执行`npm i && cd bin && node www`
+    * 访问: `localhost:3000` 即可见
