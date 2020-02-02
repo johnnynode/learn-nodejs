@@ -12,8 +12,8 @@
       <input type="submit" value="添加">
     </form>
     <ul>
-      <% list.forEach(function(one) { %>
-        <li><%= one.title %></li>
+      <% list.forEach(function(one, i) { %>
+        <li><%= one.title %> <a href="/del?i=<%=i%>">删除</a></li>
       <% }) %>
     </ul>
   </body>

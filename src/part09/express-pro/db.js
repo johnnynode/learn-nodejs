@@ -13,11 +13,11 @@ module.exports = {
         this.store();
     },
     del(i) {
-        repos[i] = null;
+        repos.splice(i, 1);
         this.store();
     },
     update(i, newOne) {
-        repos[i] = newOne;
+        repos.splice(i, 1, newOne);
         this.store();
     },
     store() {

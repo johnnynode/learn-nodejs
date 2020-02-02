@@ -37,6 +37,12 @@ app.post('/add', function(req, res) {
   res.redirect('/');
 });
 
+app.get('/del', function(req, res) {
+  var i = req.query.i;
+  db.del(i);
+  res.redirect('/');
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
