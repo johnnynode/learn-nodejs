@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var logger = require('morgan');
+var svgCaptcha = require('svg-captcha');
 var db = require('./db');
 
 // var indexRouter = require('./routes/index');
@@ -20,7 +21,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({
-  secret: 'keyboard cat'
+  secret: 'your secret'
 }))
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -39,6 +40,7 @@ app.get('/get/:i', function(req, res) {
   let i = req.params.i;
   let one = db.get(i);
   res.send(one);
+  // console.log('after'); // 可执行
 });
 
 app.post('/add', function(req, res) {
@@ -62,20 +64,38 @@ app.post('/update', function(req, res) {
 app.post('/login', function(req, res) {
   let name = req.body.name;
   let pwd = req.body.pwd;
+  let captcha = req.body.captcha.toLowerCase(); // 保持小写
+
+  /*
+  console.log('name', name);
+  console.log('pwd', pwd);
+  console.log('captcha', captcha);
+  console.log('req.session.captcha', req.session.captcha);
+  */
 
   // 此处模拟登陆 硬编码
-  if(name === 'Joh' && pwd === '123') {
+  if(name === 'Joh' && pwd === '123' && captcha === req.session.captcha) {
     req.session.logined = true;
     res.redirect('/');
-    console.log('xxx');
+    // console.log('xxx'); // 可执行
   } else {
     res.send('error!');
   }
 });
 
 app.get('/logout', function(req, res) {
-  req.session.logined = false;
+  delete req.session.logined;
+  delete req.session.captcha;
   res.redirect('/');
+});
+
+// 刷新图片
+app.get('/captcha', function (req, res) {
+  // console.log('get /captcha')
+	var captcha = svgCaptcha.create();
+	req.session.captcha = captcha.text.toLowerCase(); // 保持小写
+	res.type('svg');
+	res.status(200).send(captcha.data);
 });
 
 // catch 404 and forward to error handler

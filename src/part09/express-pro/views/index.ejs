@@ -101,7 +101,13 @@
               密码
               <input type="text" name='pwd'>
             </label>
-            <span>【备注：服务器端硬编码】用户名：Joh 密码：123</span>
+            <label>
+              <img src="/captcha" onclick="this.src='/captcha?' + Math.random()" alt="">
+              <input type="text" name='captcha' placeholder="图片验证码">
+            </label>
+            <br/>
+            <br/>
+            <div>【备注：服务器端硬编码】用户名：Joh 密码：123</div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
