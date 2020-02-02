@@ -9,16 +9,29 @@
   </head>
   <body class="container">
     <nav class="navbar navbar-light bg-light">
-      <a type="button" class="btn btn-success" href="#none" data-toggle="modal" data-target="#addmodal">
-        添加
+      <% if(logined) { %>
+        <a type="button" class="btn btn-success" data-toggle="modal" data-target="#addmodal">
+          添加
+        </a>
+        <a type="button" class="btn btn-success" href="/logout">
+          退出
+        </a>
+      <% } else { %>
+      <a type="button" class="btn btn-success" data-toggle="modal" data-target="#loginmodal">
+        登陆
       </a>
+      <% } %>
     </nav>
     <br/>
     <ul class="list-group">
       <% list.forEach(function(one, i) { %>
-        <li class="list-group-item"><%= one.title %>
-          <a class="btn btn-primary" href="/del?i=<%=i%>">删除</a>
-          <a class="btn btn-primary" data-toggle="modal" data-target="#updatemodal" onclick="get(<%=i%>)">编辑</a>
+        <li class="list-group-item">
+          <%= one.title %>
+
+          <% if(logined){ %>
+            <a class="btn btn-primary" href="/del?i=<%=i%>">删除</a>
+            <a class="btn btn-primary" data-toggle="modal" data-target="#updatemodal" onclick="get(<%=i%>)">编辑</a>
+          <% } %>
         </li>
       <% }) %>
     </ul>
@@ -61,6 +74,34 @@
               <input type="hidden" name='i'>
               <input type="text" name='title'> 标题
             </label>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+            <input type="submit" class="btn btn-primary" value="提交" />
+          </div>
+        </div>
+      </div>
+    </form>
+    <!-- 登陆modal -->
+    <form action="/login" method='post' class="modal" tabindex="-1" id="loginmodal" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">登陆</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <label>
+              用户名
+              <input type="text" name='name'>
+            </label>
+            <label>
+              密码
+              <input type="text" name='pwd'>
+            </label>
+            <span>【备注：服务器端硬编码】用户名：Joh 密码：123</span>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
