@@ -32,14 +32,27 @@ app.get('/', function(req, res) {
   res.render('index', {list: db.list})
 });
 
+app.get('/get/:i', function(req, res) {
+  let i = req.params.i;
+  let one = db.get(i);
+  res.send(one);
+});
+
 app.post('/add', function(req, res) {
   db.add({title: req.body.title});
   res.redirect('/');
 });
 
 app.get('/del', function(req, res) {
-  var i = req.query.i;
+  let i = req.query.i;
   db.del(i);
+  res.redirect('/');
+});
+
+app.post('/update', function(req, res) {
+  let i = req.body.i;
+  let title = req.body.title;
+  db.update(i, {title});
   res.redirect('/');
 });
 
