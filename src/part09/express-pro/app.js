@@ -32,6 +32,11 @@ app.get('/', function(req, res) {
   res.render('index', {list: db.list})
 });
 
+app.post('/add', function(req, res) {
+  db.add({title: req.body.title});
+  res.redirect('/');
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

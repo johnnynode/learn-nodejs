@@ -5,6 +5,12 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
+    <form action="/add" method='post'>
+      <label>
+        <input type="text" name='title'> 标题
+      </label>
+      <input type="submit" value="添加">
+    </form>
     <ul>
       <% list.forEach(function(one) { %>
         <li><%= one.title %></li>
