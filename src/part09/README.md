@@ -1,4 +1,4 @@
-express的安装
+### express的安装
 
 1. 手工安装和使用 express
 2. 通过生成器生成 express 项目
@@ -9,3 +9,157 @@ express的安装
     * `../../../node_modules/.bin/express -e .`
     * 在`express-gen`目录下执行`npm i && cd bin && node www`
     * 访问: `localhost:3000` 即可见
+
+### 浏览器对http的方法的支持
+
+1. get
+2. post
+3. 如何支持更多的方法？delete、update、search等如何加入
+
+试验：
+
+```html
+<form action="/xy" method='update'>
+    <input type="submit" value="提交">
+</form>
+```
+
+无法支持其他method的提交，会自动转换为get或post
+
+如何解决，需要靠服务器来重写请求
+
+### method override
+
+- 重写req.method属性
+- 浏览器通过GET/POST方法发送请求，请求信息里包括[伪方法]信息
+- method-override是express的一个插件，用于重写req.method属性，并把原始req.method保存在req.originalMethod里
+
+1 ） **自己写一个中间件测试修改method方法**
+表单：
+```html
+<!-- 注：这里method用原本就支持的get方法 -->
+<form action="/" method='get'>
+    <input type="hidden" name="_method" value="search" />
+    <input type="submit" value="提交">
+</form>
+```
+
+服务器中间件处理：改变req.method方法
+```js
+app.use(function(req, res, next) {
+  req.oldMethod = req.method;
+  req.method = req.query._method;
+  next();
+});
+
+// express官网上支持的method都可以这样处理
+app.search('/', function(req, res) {
+    res.send("I'm search method");
+});
+```
+
+2 ） **使用method-override插件进行处理**
+
+**方式一：**
+
+客户端
+```html
+<button id='test'>test</button>
+<script>
+    var test = document.querySelector('#test');
+    test.onclick = function() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('post', '/', true);
+        xhr.setRequestHeader('X-HTTP-Method-Override', 'search');
+        xhr.send();
+        xhr.onload = function(res) {
+            console.log(this.responseText);
+        }
+    }
+</script>
+```
+
+服务端：
+
+```js
+var methodOverride = require('method-override'); // 先安装
+app.use(methodOverride()); // 配置中间件
+
+app.search('/', function(req, res) {
+  res.send('my name is search method.');
+});
+```
+
+**方式2**
+
+客户端
+
+```html
+<form method="post" action="/?__method=search">
+    <input type="submit">
+</form>
+```
+
+服务端
+
+```js
+var methodOverride = require('method-override'); // 先安装
+app.use(methodOverride('__method')); // 配置中间件 模式是post的请求方式
+
+app.search('/', function(req, res) {
+  res.send('my name is search method.');
+});
+```
+
+**方式3**
+
+客户端
+
+```html
+<form method="get" action="/">
+    <input type="hidden" name="__method" value="search">
+    <input type="submit">
+</form>
+```
+
+服务端
+
+```js
+var methodOverride = require('method-override'); // 先安装
+app.use(methodOverride('__method', {methods:['POST', 'GET']})); // 配置中间件
+// app.use(methodOverride('__method', {methods: null})); // 配置中间件 这种方式也可
+
+app.search('/', function(req, res) {
+  res.send('my name is search method.');
+});
+```
+
+**方式4**
+
+客户端
+
+```html
+<form method="get" action="/">
+    <input type="hidden" name="__method" value="search">
+    <input type="submit">
+</form>
+```
+
+服务端
+
+```js
+var methodOverride = require('method-override'); // 先安装
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+// 这里一定要在这个位置，不能在下面，因为是post请求需要处理json
+app.use(methodOverride(function(req, res) {
+  return req.body.__method;
+})); // 配置中间件
+
+app.search('/', function(req, res) {
+  res.send('my name is search method.');
+});
+```
+
+其他method方式可以类似支持
