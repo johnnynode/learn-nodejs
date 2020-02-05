@@ -33,6 +33,7 @@
 - 重写req.method属性
 - 浏览器通过GET/POST方法发送请求，请求信息里包括[伪方法]信息
 - method-override是express的一个插件，用于重写req.method属性，并把原始req.method保存在req.originalMethod里
+- [method-override github](https://github.com/expressjs/method-override)
 
 1 ） **自己写一个中间件测试修改method方法**
 表单：
