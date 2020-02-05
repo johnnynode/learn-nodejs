@@ -219,3 +219,48 @@ router.get('/test/', function(req, res) {
 });
 
 ```
+
+### 路由适配器的快捷写法
+
+客户端
+
+```html
+<form action="/test" method="post">
+    <input type="submit" value="test post method">
+</form>
+
+<br />
+<br />
+<br />
+
+<form action="/test">
+    <input type="submit" value="test get method">
+</form>
+```
+
+服务器
+
+```js
+var router = express.Router();
+
+router.route('/test')
+  .get(function(req, res, next) {
+    console.log('get one');
+    next();
+  })
+  .get(function(req, res, next) {
+    console.log('get two');
+    res.send('test get');
+  })
+  .post(function(req, res, next) {
+    console.log('post one');
+    next();
+  })
+  .post(function(req, res, next) {
+    console.log('post two');
+    res.send('test post');
+  });
+
+app.use('/', router);
+
+```
