@@ -264,3 +264,145 @@ router.route('/test')
 app.use('/', router);
 
 ```
+
+### 路由请求参数处理器
+
+1 ） **处理单个参数**
+
+```js
+const express = require('express');
+const app = express();
+
+app.param('id', (req, res, next, id) => {
+    if(id !== '001') {
+        res.send(404);
+    } else {
+        next();
+    }
+});
+
+app.get('/user/:id', (req, res)=>{
+    res.send('helloworld user id is: ' + req.params.id);
+});
+
+app.listen(3000);
+```
+
+或 简化之 关键代码：
+
+```js
+app.get('/user/:id', (req, res) => {
+    res.send('helloworld user id is: ' + req.params.id);
+})
+.param('id', (req, res, next, id) => {
+    if(id !== '001') {
+        res.send(404);
+    } else {
+        next();
+    }
+});
+```
+
+处理多个参数，关键代码：
+
+```js
+app.get('/user/:id/:name', (req, res) => {
+    res.send(
+        `
+        user's name = ${req.params.name}
+        user's id = ${req.params.id}
+        `
+    );
+})
+.param(['id', 'name'], (req, res, next, value) => {
+    console.log('value', value); // 这里会调用两次
+    next();
+});
+```
+
+因为可能会调用两次，需要对不同的参数进行特殊处理，如果觉得麻烦，可以这样
+
+```js
+app.get('/user/:id/:name', (req, res) => {
+    res.send(
+        `
+        user's name = ${req.params.name}
+        user's id = ${req.params.id}
+        `
+    );
+})
+.param('id', (req, res, next, value) => {
+    console.log('id', value); // 这里会调用两次
+    next();
+})
+.param('name', (req, res, next, value) => {
+    console.log('name', value); // 这里会调用两次
+    next();
+});
+```
+
+**router 也有和app类似的功能**
+
+```js
+const express = require('express');
+const app = express();
+const router = express.Router();
+
+app.use('/', router);
+
+router.get('/user/:id/:name', (req, res) => {
+    res.send(
+        `
+        user's name = ${req.params.name}
+        user's id = ${req.params.id}
+        `
+    );
+})
+.param('id', (req, res, next, value) => {
+    console.log('id', value); // 这里会调用两次
+    next();
+})
+.param('name', (req, res, next, value) => {
+    console.log('name', value); // 这里会调用两次
+    next();
+});
+
+app.listen(3000);
+```
+
+备注：router是没有数组的相关app， 不能通过`.param(['id', 'name'], ()=>{})` 这样的方式来处理参数
+一个一个的处理
+
+router.param 还支持其他的写法：
+
+```js
+const express = require('express');
+const app = express();
+const router = express.Router();
+
+app.use('/', router);
+
+// 此处定义router的param 不能写在下面，需要独立定义
+router.param((key, value) => {
+    console.log('key :', key); // 这里会调用两次
+    console.log('value :', value); // 这里会调用两次
+    
+    return (req, res, next, v)=>{
+        console.log('v: ', v);
+        next();
+    }
+});
+
+router.get('/user/:id/:name', (req, res) => {
+    res.send(
+        `
+        user's name = ${req.params.name}
+        user's id = ${req.params.id}
+        `
+    );
+})
+.param('id', '100')
+.param('name', 'Joh');
+
+app.listen(3000);
+```
