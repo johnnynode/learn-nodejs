@@ -406,3 +406,133 @@ router.get('/user/:id/:name', (req, res) => {
 
 app.listen(3000);
 ```
+
+### 路由处理器组链
+
+1 ) **方式1**
+
+```js
+app.get('/', (req, res, next) => {
+    console.log(1);
+    next();
+});
+app.get('/', (req, res, next) => {
+    console.log(2);
+    next();
+});
+app.get('/', (req, res, next) => {
+    console.log(2);
+    res.send('Hello!')
+});
+```
+
+2 ) **方式2**
+
+```js
+app.get('/',
+    function(req, res, next) {
+        console.log(1);
+        next();
+    },
+    function(req, res, next) {
+        console.log(2);
+        next();
+    },
+    function(req, res) {
+        console.log(3);
+        res.send('Hello');
+    }
+);
+```
+
+3 ） **方式3**
+
+```js
+app.get('/',
+    [function(req, res, next) {
+        console.log(1);
+        next();
+    },
+    function(req, res, next) {
+        console.log(2);
+        next();
+    },
+    function(req, res) {
+        console.log(3);
+        res.send('Hello');
+    }]
+);
+```
+
+4 ) **方式4**
+
+```js
+app.get('/',
+    [function(req, res, next) {
+        console.log(1);
+        next();
+    },
+    function(req, res, next) {
+        console.log(2);
+        next();
+    }],
+    function(req, res) {
+        console.log(3);
+        res.send('Hello');
+    }
+);
+```
+
+### 路由和数据分离
+
+1 ） **初始写法**
+
+```js
+let userRepo = {
+    '001': {name:'user001'},
+    '002': {name:'user002'}
+};
+
+app.get('/user/:id', (req, res, next) => {
+    let id = req.params.id;
+    let user = userRepo[id];
+    if(user) {
+        res.send(user);
+    } else {
+        res.send(404);
+    }
+});
+```
+
+这样写法很不好，数据与路由混在一起，需要解耦
+
+2 ） **方式2**
+
+db.js
+```js
+let userRepo = {
+    '001': {name:'user001'},
+    '002': {name:'user002'}
+};
+
+module.exports = {
+    getUser(req, res, next) {
+        let id = req.params.id;
+        let user = userRepo[id];
+        if(user) {
+            req.user = user;
+            next();
+        } else {
+            res.send(404);
+        }
+    }
+}
+```
+
+app3.js
+
+```js
+app.get('/user/:id', db.getUser, (req, res) => {
+    res.send(req.user);
+});
+```
