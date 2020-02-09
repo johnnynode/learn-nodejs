@@ -1,0 +1,60 @@
+不写
+
+<form action="/submit" method="post">
+    <input type="text" name="name">
+    <input type="password" name="password">
+    <input type="submit">
+</form>
+
+<hr />
+
+application/x-www-form-urlencoded
+
+<form action="/submit" method="post" enctype="application/x-www-form-urlencoded">
+    <input type="text" name="name">
+    <input type="password" name="password">
+    <input type="submit">
+</form>
+
+<hr />
+
+application/json 这样不支持，会自动转化成application/x-www-form-urlencoded
+
+<form action="/submit" method="post" enctype="application/json">
+    <input type="text" name="name">
+    <input type="password" name="password">
+    <input type="submit">
+</form>
+
+<hr />
+
+text/plain
+
+<form action="/submit" method="post" enctype="text/plain">
+    <input type="text" name="name">
+    <input type="password" name="password">
+    <input type="submit">
+</form>
+
+
+<button id="btn">bodyParser.json BTN</button>
+
+<hr />
+
+<button id="btn2">bodyParser.raw BTN</button>
+
+<script>
+    document.querySelector('#btn').onclick = function() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('post', '/submit', false);
+        xhr.setRequestHeader('Content-Type', 'application/');
+        xhr.send(JSON.stringify({name:'Joh'}));
+    }
+
+    document.querySelector('#btn2').onclick = function() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('post', '/submit', false);
+        xhr.setRequestHeader('Content-Type', 'application/octet-stream');
+        xhr.send(JSON.stringify({name:'Joh'}));
+    }
+</script>
