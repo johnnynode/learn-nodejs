@@ -31,7 +31,7 @@ var dbs = {
 }
 
 app.get('/test', dbs.getData, (req, res) => {
-    res.render('home.html'); // 第二个参数
+    res.render('home'); // 第二个参数
 });
 
 // 自定义中间件测试完毕
