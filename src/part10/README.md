@@ -76,3 +76,65 @@
 - 默认删除全部匹配的条件, justOne参数来限制只删除一条
 - `db.restaurants.remove({"borough": "Manhattan"})` 删除全部
 - `db.restaurants.remove({"borough": "Manhattan"}, {justOne: true})`
+
+### MongoDB数据分页
+
+- mongodb提供了傻傻的两个函数：`limit()`，`skip()`
+- 第一页是`page=0`。每页10条，所以当前页的查询语句: `db.stu.find({}).limit(10).skip(page*10)`
+- 数据总数怎么得到：`db.stu.stats().count;`
+
+### Cookie 
+
+- HTTP是无状态协议。简单地说，当你浏览了一个页面，然后转到同一个网站的另一个页面，服务器无法认识到，这是同一个浏览器在访问同一个网站。每一次的访问，都是没有任何关系的。
+那么世界就乱套了，比如我上一次访问，登陆了，下一次访问，又让我登陆，不存在登陆这事儿了。
+- Cookie是一个简单到爆的想法：当访问一个页面的时候，服务器在下行HTTP报文中，命令浏览器存储一个字符串；浏览器再访问同一个域的时候，将把这个字符串携带到上行HTTP请求中。
+- 第一次访问一个服务器，不可能携带cookie。 必须是服务器得到这次请求，在下行响应报头中，携带cookie信息，此后每一次浏览器往这个服务器发出的请求，都会携带这个cookie。
+
+**特点**
+- cookie是不加密的，用户可以自由看到；
+- 用户可以删除cookie，或者禁用它
+- cookie可以被篡改
+- cookie可以用于攻击
+- cookie存储量很小。未来实际上要被localStorage替代，但是后者IE9兼容。
+- express中的cookie：res负责设置cookie，req负责识别cookie
+
+### Session
+
+- 会话Session不是一个天生就有的技术，而是依赖cookie
+- 当一个浏览器禁用cookie的时候，登陆效果消失； 或者用户清除了cookie，登陆也消失。
+- session比cookie不一样在哪里呢？ 
+    * session下发的是乱码，并且服务器自己缓存一些东西，下次浏览器的请求带着乱码上来，此时与缓存进行比较，看看是谁。
+    * 一个乱码，可以对应无限大的数据。
+- 任何语言中，session的使用，是“机理透明”的。它是帮你设置cookie的，但是足够方便，让你感觉不到这事儿和cookie有关。
+
+示例：
+
+```js
+var session = require("express-session");
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true
+}))
+	
+app.get("/",function(req,res){
+    if(req.session.login == "1"){
+        res.send("欢迎" + req.session.username);
+    }else{
+        res.send("没有成功登陆");
+    }
+});
+
+app.get("/login",function(req,res){
+    req.session.login = "1";	//设置这个session
+    req.session.username = "哈哈";
+    res.send("你已经成功登陆");
+});
+
+```
+
+- 不管你加密多大的东西，哪怕10M文字，都会加密为32位的字符串，就是密码。
+- 并且神奇的，数学上能够保证, 哪怕你更改1个文字，都能大变。所以MD5也能用于比对版本。
+- MD5是数学上,不能破解的, 不能反向破解。
+- 也就是说，C4CA4238A0B923820DCC509A6F75849B 没有一个函数，能够翻译成为1的。
+- 有的人做数据库，就是把1~999999所有数字都用MD5加密了，然后进行了列表，所以有破解的可能。
