@@ -1,6 +1,3 @@
-/**
- * Created by Danny on 2015/9/26 9:46.
- */
 var express = require("express");
 var app = express();
 var formidable = require('formidable');
