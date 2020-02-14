@@ -1,5 +1,10 @@
 "use strict";
 
+/*
+- 其中request是一个单独的模块，需要 `npm i request --save` 来安装
+- request 模块地址的具体api在： https://www.npmjs.com/package/request
+*/
+
 const http = require('http'); // 加载http核心模块
 const server = http.createServer(); // 通过http核心模块暴露的createServer方法得到一个服务器实例
 
