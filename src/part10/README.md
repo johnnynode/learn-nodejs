@@ -196,3 +196,7 @@ app.get("/login",function(req,res){
             }
         });
     ```
+
+#### jcrop
+
+- jQuery截图插件jcrop在项目目录下
