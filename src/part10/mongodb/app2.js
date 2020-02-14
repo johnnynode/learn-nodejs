@@ -20,13 +20,13 @@ app.get("/",function(req,res) {
         //查询数据库，cursor游标，游标可以用each方法遍历
         //每次表示一条document
         var result = [];
-        var cursor = db.collection('teacher').find( );
+        var cursor = db.collection('teacher').find();
         cursor.each(function(err, doc) {
             if(err){
                 //res.write("游标遍历错误");
                 return;
             }
-            if (doc != null) {
+            if (doc) {
                 result.push(doc);
             } else {
                 //console.log(result);
@@ -44,7 +44,7 @@ app.get("/add",function(req,res){
     res.render("add");
 });
 
-app.get("/tijiao",function(req,res){
+app.get("/dopost",function(req,res){
 
     //得到参数
     var name = req.query.name;
