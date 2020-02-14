@@ -3,7 +3,6 @@ var MongoClient = require('mongodb').MongoClient;
 // var assert = require('assert');
 
 var app = express();
-
 app.set("view engine","ejs");
 
 //数据库连接的地址，最后的斜杠表示数据库名字
@@ -45,7 +44,6 @@ app.get("/add",function(req,res){
 });
 
 app.get("/dopost",function(req,res){
-
     //得到参数
     var name = req.query.name;
     var age = req.query.age;
