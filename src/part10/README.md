@@ -83,7 +83,13 @@
 - 第一页是`page=0`。每页10条，所以当前页的查询语句: `db.stu.find({}).limit(10).skip(page*10)`
 - 数据总数怎么得到：`db.stu.stats().count;`
 
-### Cookie 
+### MongoDB其他说明
+
+- 把常用的增删改查, 都封装成为module
+- 开发DAO：J2EE开发人员使用数据访问对象（DAO）设计模式把底层的数据访问逻辑和高层的商务逻辑分开.实现DAO模式能够更加专注于编写数据访问代码
+- 使用我们自己的DAO模块，来实现数据库插入, 代码变得简单
+
+### Cookie
 
 - HTTP是无状态协议。简单地说，当你浏览了一个页面，然后转到同一个网站的另一个页面，服务器无法认识到，这是同一个浏览器在访问同一个网站。每一次的访问，都是没有任何关系的。
 那么世界就乱套了，比如我上一次访问，登陆了，下一次访问，又让我登陆，不存在登陆这事儿了。
@@ -99,7 +105,6 @@
 - express中的cookie：res负责设置cookie，req负责识别cookie
 
 ### Session
-
 - 会话Session不是一个天生就有的技术，而是依赖cookie
 - 当一个浏览器禁用cookie的时候，登陆效果消失； 或者用户清除了cookie，登陆也消失。
 - session比cookie不一样在哪里呢？ 
@@ -138,3 +143,56 @@ app.get("/login",function(req,res){
 - MD5是数学上,不能破解的, 不能反向破解。
 - 也就是说，C4CA4238A0B923820DCC509A6F75849B 没有一个函数，能够翻译成为1的。
 - 有的人做数据库，就是把1~999999所有数字都用MD5加密了，然后进行了列表，所以有破解的可能。
+
+### 关于数据加密
+
+- MD5加密是函数型加密。就是每次加密的结果一定相同，没有随机位。
+- 特点：
+    * 不管加密的文字，多长多短，永远都是32位英语字母、数字混合。
+    * 哪怕只改一个字，密文都会大变。
+    * MD5没有反函数破解的可能，网上的破解工具，都是通过字典的模式，通过大量列出明-密对应的字典，找到明码。
+    * 两次加密网上也有对应的字典。所以我们不要直接用一层md5，这样对黑客来说和明码是一样。
+- MD5常用于作为版本校验。可以比对两个软件、文件是否完全一致。
+- node中自带了一个模块，叫做crypto模块，负责加密。
+- 首先创建hash，然后update和digest：
+    ```js
+    var md5 = crypto.createHash('md5');
+    var password = md5.update(fields.password).digest('base64');
+    ```
+
+### 图片处理
+
+- 瑞士军刀：GraphicsMagick is the swiss army knife of image processing. 
+- http://www.graphicsmagick.org/
+- 只要服务器需要处理图片，那么这个服务器就要安装graphicsmagick软件，免费开源
+- 装完之后，可视化工具一点用都没有，从桌面上删除。我们要把安装目录设置为环境变量
+
+**控制台CMD命令**
+
+- 格式转换：`gm convert a.bmp a.jpg`
+- 更改当前目录下*.jpg的尺寸大小，并保存于目录.thumb里面
+    * `gm mogrify -resize 320x200 danny.jpg`
+- nodejs要使用graphicsmagick，需要npm装一个gm的包
+- node.js缩略图的制作
+    ```js
+    var gm = require('gm');
+    gm('./xy.jpg')
+        .resize(50, 50,"!")
+        .write('./zz.jpg', function (err) {
+            if (err) {
+                console.log(err);
+            }
+        });
+    ```
+- node.js头像裁切
+    ```js
+        var gm = require('gm');
+    // 141  96 是宽高 152  181是坐标
+    gm("./xy.jpg")
+        .crop(141,96,152,181)
+        .write("./zz.jpg",function(err){
+            if (err) {
+                console.log(err);
+            }
+        });
+    ```
