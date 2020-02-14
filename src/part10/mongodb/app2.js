@@ -31,7 +31,7 @@ app.get("/",function(req,res) {
                 //console.log(result);
                 //遍历完毕
                 db.close();
-                res.render("index",{
+                res.render("home",{
                     "result" : result
                 });
             }
