@@ -164,8 +164,12 @@ app.get("/login",function(req,res){
 
 - 瑞士军刀：GraphicsMagick is the swiss army knife of image processing. 
 - http://www.graphicsmagick.org/
+- https://github.com/aheckmann/gm
 - 只要服务器需要处理图片，那么这个服务器就要安装graphicsmagick软件，免费开源
 - 装完之后，可视化工具一点用都没有，从桌面上删除。我们要把安装目录设置为环境变量
+- windows如果是setup安装完毕要重启电脑，mac端需要进行安装其他软件
+    * `brew install imagemagick --with-webp`
+    * `brew install graphicsmagick`
 
 **控制台CMD命令**
 
