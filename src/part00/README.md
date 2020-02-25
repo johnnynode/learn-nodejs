@@ -78,7 +78,7 @@
 - DOM操作：jQuery / ExtJS / YUI
 - 结构化前端框架：AngularJS / Backbone.js / Ember.js
 
-5 ）相关语言
+5 ）其他实现
 Rhino引擎
 javax.script API
 
